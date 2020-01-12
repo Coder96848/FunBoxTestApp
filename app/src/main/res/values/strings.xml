@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">FunBoxTestApp</string>
+    <string name="front">Store-front</string>
+    <string name="back">Back-end</string>
+    <string name="price">Цена</string>
+    <string name="count">Количество</string>
+    <string name="buy">Купить</string>
+    <string name="name">Название</string>
+    <string name="change">Изменить</string>
+    <string name="shop">Магазин</string>
+    <string name="add">Добавить</string>
+</resources>

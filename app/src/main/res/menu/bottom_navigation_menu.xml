@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/front_bottom_navigation_item"
+        android:state_checked="false"
+        android:title="@string/front"/>
+    <item
+        android:id="@+id/back_bottom_navigation_item"
+        android:state_checked="false"
+        android:title="@string/back"/>
+
+</menu>
