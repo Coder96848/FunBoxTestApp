@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.funboxtestapp.db.Product;
 import com.example.funboxtestapp.db.ProductDAO;
@@ -46,7 +45,7 @@ public class App extends Application {
         }
     }
 
-    public static void closeDb() throws Exception {
+    public static void closeDb(){
         productRoomDB.close();
     }
 
@@ -81,7 +80,7 @@ public class App extends Application {
         disposable.add(dataAdapter.insert(product)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> Toast.makeText(getApplicationContext() ,"Запись добавлена", Toast.LENGTH_SHORT).show(),
+                .subscribe(() -> {},
                         throwable -> Log.e(TAG, "Unable to update products", throwable)));
     }
 

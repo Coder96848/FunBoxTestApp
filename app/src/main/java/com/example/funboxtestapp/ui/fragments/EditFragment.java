@@ -18,6 +18,7 @@ import com.example.funboxtestapp.db.Product;
 import com.example.funboxtestapp.interfaces.IFragment;
 import com.example.funboxtestapp.util.DataAdapter;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
@@ -73,14 +74,16 @@ public class EditFragment extends Fragment {
                 if (isNewProduct) {
                     mDisposable.add(dataAdapter.insert(newProduct())
                             .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(() -> {},
-                                    throwable -> Log.e(TAG, "Unable to update products", throwable)));
+                                    throwable -> Log.e(TAG, "Unable to insert products", throwable)));
                 }else {
-                    mProduct.setName(mNameEditText.getText().toString());
-                    mProduct.setPrice(Double.valueOf(mPriceEditText.getText().toString().replace(",", ".")));
-                    mProduct.setCount(Integer.valueOf(mCountEditText.getText().toString()));
+                    mProduct.setName(getName());
+                    mProduct.setPrice(getPrice());
+                    mProduct.setCount(getCount());
                     mDisposable.add(dataAdapter.update(mProduct)
                             .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(() -> {},
                                     throwable -> Log.e(TAG, "Unable to update products", throwable)));
                 }
@@ -107,8 +110,25 @@ public class EditFragment extends Fragment {
     }
 
     private Product newProduct(){
-        return new Product(mNameEditText.getText().toString(),
-                Double.valueOf(mPriceEditText.getText().toString().replace(",", ".")),
-                Integer.valueOf(mCountEditText.getText().toString()));
+        return new Product(getName(),
+                getPrice(),
+                getCount());
     }
+
+    private String getName(){
+        String name = mNameEditText.getText().toString();
+        return !name.equals("") ? mNameEditText.getText().toString() : "";
+    }
+
+    private Double getPrice(){
+        String price = mPriceEditText.getText().toString().replace(",", ".");
+        return !price.equals("") ? Double.parseDouble(price) : 0;
+    }
+
+    private int getCount(){
+        String count = mCountEditText.getText().toString();
+        return !count.equals("") ? Integer.parseInt(count) : 0;
+    }
+
+
 }

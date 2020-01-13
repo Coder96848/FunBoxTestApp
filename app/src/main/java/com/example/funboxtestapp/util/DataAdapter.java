@@ -11,7 +11,7 @@ import io.reactivex.Single;
 
 public class DataAdapter implements IAdapter {
 
-    ProductDAO productDAO;
+    private ProductDAO productDAO;
 
     public DataAdapter(ProductDAO productDAO) {
         this.productDAO = productDAO;
@@ -31,6 +31,12 @@ public class DataAdapter implements IAdapter {
     public Completable update(Product product) {
         return this.productDAO.update(product);
     }
+
+    @Override
+    public Completable buyProduct(Product product) {
+        return this.productDAO.buyProduct(product);
+    }
+
 
     @Override
     public Completable delete(Product product) {

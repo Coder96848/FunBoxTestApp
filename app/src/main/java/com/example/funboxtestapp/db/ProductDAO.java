@@ -21,6 +21,9 @@ public interface ProductDAO {
     @Update
     Completable update(Product Product);
 
+    @Update
+    Completable buyProduct(Product product);
+
     @Delete
     Completable delete(Product product);
 

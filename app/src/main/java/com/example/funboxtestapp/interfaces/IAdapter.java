@@ -12,6 +12,7 @@ public interface IAdapter {
     Single<List<Product>> getProducts();
     Completable insert(Product product);
     Completable update(Product product);
+    Completable buyProduct(Product product);
     Completable delete(Product product);
     Completable deleteAll();
 }

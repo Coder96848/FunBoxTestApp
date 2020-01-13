@@ -5,20 +5,23 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.funboxtestapp.App;
 import com.example.funboxtestapp.R;
 import com.example.funboxtestapp.db.Product;
 import com.example.funboxtestapp.interfaces.IFragment;
 import com.example.funboxtestapp.util.DataAdapter;
+import com.example.funboxtestapp.util.DetailFragmentViewPagerAdapter;
 
+import java.util.ArrayList;
+
+import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -26,14 +29,26 @@ import io.reactivex.schedulers.Schedulers;
 public class DetailFragment extends Fragment {
 
     private static final String TAG = DetailFragment.class.getSimpleName();
-    private Product mProduct;
+    private ArrayList<Product> mProducts = new ArrayList<>();
     private CompositeDisposable mDisposable = new CompositeDisposable();
-    private DataAdapter dataAdapter = new DataAdapter(App.getProductDAO());
+    private int position;
+    private ViewPager mViewPager;
 
-    public DetailFragment(Product mProduct) {
-        this.mProduct = mProduct;
+    public DetailFragment(int position) {
+        this.position = position;
+        DataAdapter dataAdapter = new DataAdapter(App.getProductDAO());
+        mDisposable.add(dataAdapter.getProducts()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .toFlowable()
+                .flatMap(Flowable::fromIterable)
+                .filter(products -> products.getCount() > 0)
+                .toList()
+                .subscribe(products -> {
+                    mProducts.addAll(products);
+                    setAdapter();
+                    }, throwable -> Log.e(TAG, "Unable to get products", throwable)));
     }
-
 
     @Nullable
     @Override
@@ -50,29 +65,24 @@ public class DetailFragment extends Fragment {
         toolbar.setNavigationIcon(R.drawable.icon_back);
         toolbar.setNavigationOnClickListener(v -> onBack());
 
-        TextView nameTextView = view.findViewById(R.id.fragment_detail_text_view_name_good);
-        TextView priceTextView = view.findViewById(R.id.fragment_detail_text_view_price_good);
-        TextView countTextView = view.findViewById(R.id.fragment_detail_text_view_count_good);
+        mViewPager = view.findViewById(R.id.fragment_detail_view_pager);
+    }
 
-        nameTextView.setText(mProduct.getName());
-        priceTextView.setText(String.format("%.2f руб.", mProduct.getPrice()));
-        countTextView.setText(String.format("%d шт.", mProduct.getCount()));
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
 
-        Button buyButton = view.findViewById(R.id.fragment_detail_button_buy);
-        buyButton.setOnClickListener(v -> {
-            mProduct.buyProduct();
-            mDisposable.add(dataAdapter.update(mProduct)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(() ->{},
-                            throwable -> Log.e(TAG, "Unable to update products", throwable)));
-            onBack();
-        });
+        mDisposable.clear();
     }
 
     private void onBack(){
         if(getActivity() instanceof IFragment){
             ((IFragment) getActivity()).onFragmentBackStack();
         }
+    }
+
+    private void setAdapter(){
+        mViewPager.setAdapter(new DetailFragmentViewPagerAdapter(getChildFragmentManager(), mProducts));
+        mViewPager.setCurrentItem(position);
     }
 }

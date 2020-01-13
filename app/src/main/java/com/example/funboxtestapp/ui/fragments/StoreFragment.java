@@ -55,14 +55,7 @@ public class StoreFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        mDisposable.add(dataAdapter.getProducts()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .toFlowable()
-                .flatMap(Flowable::fromIterable)
-                .filter(products -> products.getCount() > 0)
-                .toList()
-                .subscribe(this::setAdapter, throwable -> Log.e(TAG, "Unable to get products", throwable)));
+        getProducts();
     }
 
     @Override
@@ -75,5 +68,16 @@ public class StoreFragment extends Fragment {
     private void setAdapter(List<Product> productList){
         StoreFragmentRecyclerAdapter adapter = new StoreFragmentRecyclerAdapter(this.getContext(), new ArrayList<>(productList), false);
         recyclerView.setAdapter(adapter);
+    }
+
+    private void getProducts(){
+        mDisposable.add(dataAdapter.getProducts()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .toFlowable()
+                .flatMap(Flowable::fromIterable)
+                .filter(products -> products.getCount() > 0)
+                .toList()
+                .subscribe(this::setAdapter, throwable -> Log.e(TAG, "Unable to get products", throwable)));
     }
 }

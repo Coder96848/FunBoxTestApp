@@ -44,7 +44,7 @@ public class StoreFragmentRecyclerAdapter extends RecyclerView.Adapter<StoreFrag
         if(isAdmin){
             holder.itemView.setOnClickListener(v -> openDetailFragment(new EditFragment(mProducts.get(position)), "EDIT_FRAGMENT"));
         }else {
-            holder.itemView.setOnClickListener(v -> openDetailFragment(new DetailFragment(mProducts.get(position)), "DETAIL_FRAGMENT"));
+            holder.itemView.setOnClickListener(v -> openDetailFragment(new DetailFragment(position), "DETAIL_FRAGMENT"));
         }
     }
 

@@ -9,80 +9,93 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"/>
 
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/twenty_dp"
-        android:layout_marginTop="@dimen/twenty_dp"
-        android:textAppearance="@style/AppThemeText"
-        android:text="@string/name"/>
+        android:layout_height="wrap_content">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="@dimen/twenty_dp"
-        android:background="@color/grey"/>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/fragment_edit_edit_text_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/twenty_dp"
-        android:layout_marginTop="@dimen/twenty_dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/twenty_dp"
+                android:layout_marginTop="@dimen/twenty_dp"
+                android:textAppearance="@style/AppThemeText"
+                android:text="@string/name"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="@dimen/twenty_dp"
-        android:background="@color/grey"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="@dimen/twenty_dp"
+                android:background="@color/grey"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/twenty_dp"
-        android:layout_marginTop="@dimen/twenty_dp"
-        android:textAppearance="@style/AppThemeText"
-        android:text="@string/price"/>
+            <EditText
+                android:id="@+id/fragment_edit_edit_text_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/twenty_dp"
+                android:layout_marginTop="@dimen/twenty_dp"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="@dimen/twenty_dp"
-        android:background="@color/grey"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="@dimen/twenty_dp"
+                android:background="@color/grey"/>
 
-    <EditText
-        android:id="@+id/fragment_edit_edit_text_price"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/twenty_dp"
-        android:layout_marginTop="@dimen/twenty_dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/twenty_dp"
+                android:layout_marginTop="@dimen/twenty_dp"
+                android:textAppearance="@style/AppThemeText"
+                android:text="@string/price"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="@dimen/twenty_dp"
-        android:background="@color/grey"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="@dimen/twenty_dp"
+                android:background="@color/grey"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/twenty_dp"
-        android:layout_marginTop="@dimen/twenty_dp"
-        android:textAppearance="@style/AppThemeText"
-        android:text="@string/count"/>
+            <EditText
+                android:id="@+id/fragment_edit_edit_text_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/twenty_dp"
+                android:layout_marginTop="@dimen/twenty_dp"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="@dimen/twenty_dp"
-        android:background="@color/grey"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="@dimen/twenty_dp"
+                android:background="@color/grey"/>
 
-    <EditText
-        android:id="@+id/fragment_edit_edit_text_count"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/twenty_dp"
-        android:layout_marginTop="@dimen/twenty_dp"
-        android:inputType="number"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/twenty_dp"
+                android:layout_marginTop="@dimen/twenty_dp"
+                android:textAppearance="@style/AppThemeText"
+                android:text="@string/count"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="@dimen/twenty_dp"
+                android:background="@color/grey"/>
+
+            <EditText
+                android:id="@+id/fragment_edit_edit_text_count"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/twenty_dp"
+                android:layout_marginTop="@dimen/twenty_dp"
+                android:inputType="number"/>
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

@@ -59,11 +59,7 @@ public class BackFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
         mRecyclerView.setLayoutManager(linearLayoutManager);
 
-        mProductDisposable.add(dataAdapter.getProducts()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::setAdapter,
-                throwable -> Log.e(TAG, "Unable to get products", throwable)));
+        getProducts();
     }
 
     @Override
@@ -77,5 +73,11 @@ public class BackFragment extends Fragment {
         mRecyclerView.setAdapter(adapter);
     }
 
-
+    private void getProducts(){
+        mProductDisposable.add(dataAdapter.getProducts()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::setAdapter,
+                        throwable -> Log.e(TAG, "Unable to get products", throwable)));
+    }
 }
