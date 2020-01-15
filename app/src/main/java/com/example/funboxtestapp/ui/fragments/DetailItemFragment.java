@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment;
 import com.example.funboxtestapp.App;
 import com.example.funboxtestapp.R;
 import com.example.funboxtestapp.db.Product;
-import com.example.funboxtestapp.util.DataAdapter;
+import com.jakewharton.rxbinding3.view.RxView;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -26,8 +26,6 @@ public class DetailItemFragment extends Fragment {
     private static final String TAG = DetailItemFragment.class.getSimpleName();
     private Product mProduct;
     private CompositeDisposable mDisposable = new CompositeDisposable();
-    private DataAdapter dataAdapter = new DataAdapter(App.getProductDAO());
-
 
     public DetailItemFragment(Product product) {
         this.mProduct = product;
@@ -52,13 +50,21 @@ public class DetailItemFragment extends Fragment {
         countTextView.setText(String.format("%d шт.", mProduct.getCount()));
 
         Button buyButton = view.findViewById(R.id.fragment_detail_item_button_buy);
-        buyButton.setOnClickListener(v -> {
-            mProduct.buyProduct();
-            mDisposable.add(dataAdapter.update(mProduct)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(() -> countTextView.setText(String.format("%d шт.", mProduct.getCount())),
-                            throwable -> Log.e(TAG, "Unable to update products", throwable)));
-        });
+
+        mDisposable.add(RxView.clicks(buyButton)
+                .subscribe(isClick -> {
+                        mProduct.buyProduct();
+                        mDisposable.add(App.getDataAdapter().update(mProduct)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(() -> countTextView.setText(String.format("%d шт.", mProduct.getCount())))
+                        );
+                    }, throwable -> Log.e(TAG, "Unable to get products", throwable)));
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mDisposable.clear();
     }
 }

@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements IFragment {
 
         Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.activity_main_fragment_main);
         if (currentFragment == null) {
-            setFragment(new StoreFragment(), "STORE_FRAGMENT");
+            setFragment(new StoreFragment(), StoreFragment.class.getSimpleName());
             bottomNavigationView.setSelectedItemId(R.id.front_bottom_navigation_item);
         }
 
@@ -33,10 +33,10 @@ public class MainActivity extends AppCompatActivity implements IFragment {
                 menuItem -> {
                     switch (menuItem.getItemId()) {
                         case R.id.front_bottom_navigation_item:
-                            setFragment(new StoreFragment(), "STORE_FRAGMENT");
+                            setFragment(new StoreFragment(), StoreFragment.class.getSimpleName());
                             return true;
                         case R.id.back_bottom_navigation_item:
-                            setFragment(new BackFragment(), "SEARCH_FRAGMENT");
+                            setFragment(new BackFragment(), BackFragment.class.getSimpleName());
                             return true;
                     }
                     return false;
@@ -73,4 +73,5 @@ public class MainActivity extends AppCompatActivity implements IFragment {
     public void onFragmentBackStack() {
         getSupportFragmentManager().popBackStack();
     }
+
 }

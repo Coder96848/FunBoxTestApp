@@ -5,14 +5,13 @@ import com.example.funboxtestapp.db.Product;
 import java.util.List;
 
 import io.reactivex.Completable;
-import io.reactivex.Single;
+import io.reactivex.Flowable;
 
 
 public interface IAdapter {
-    Single<List<Product>> getProducts();
+    Flowable<List<Product>> getProducts();
     Completable insert(Product product);
     Completable update(Product product);
-    Completable buyProduct(Product product);
     Completable delete(Product product);
     Completable deleteAll();
 }

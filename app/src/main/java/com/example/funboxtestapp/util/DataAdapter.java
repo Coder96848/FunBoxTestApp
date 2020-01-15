@@ -7,7 +7,7 @@ import com.example.funboxtestapp.interfaces.IAdapter;
 import java.util.List;
 
 import io.reactivex.Completable;
-import io.reactivex.Single;
+import io.reactivex.Flowable;
 
 public class DataAdapter implements IAdapter {
 
@@ -18,7 +18,7 @@ public class DataAdapter implements IAdapter {
     }
 
     @Override
-    public Single<List<Product>> getProducts() {
+    public Flowable<List<Product>> getProducts() {
         return this.productDAO.getProducts();
     }
 
@@ -31,12 +31,6 @@ public class DataAdapter implements IAdapter {
     public Completable update(Product product) {
         return this.productDAO.update(product);
     }
-
-    @Override
-    public Completable buyProduct(Product product) {
-        return this.productDAO.buyProduct(product);
-    }
-
 
     @Override
     public Completable delete(Product product) {

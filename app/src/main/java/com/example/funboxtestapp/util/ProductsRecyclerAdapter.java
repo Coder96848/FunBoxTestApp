@@ -18,13 +18,13 @@ import com.example.funboxtestapp.ui.fragments.EditFragment;
 
 import java.util.ArrayList;
 
-public class StoreFragmentRecyclerAdapter extends RecyclerView.Adapter<StoreFragmentRecyclerAdapter.StoreItemViewHolder> {
+public class ProductsRecyclerAdapter extends RecyclerView.Adapter<ProductsRecyclerAdapter.StoreItemViewHolder> {
 
     private Context mContext;
     private ArrayList<Product> mProducts;
     private boolean isAdmin;
 
-    public StoreFragmentRecyclerAdapter(Context context, ArrayList<Product> products, boolean isAdmin) {
+    public ProductsRecyclerAdapter(Context context, ArrayList<Product> products, boolean isAdmin) {
         this.mContext = context;
         this.mProducts = products;
         this.isAdmin = isAdmin;
@@ -34,7 +34,7 @@ public class StoreFragmentRecyclerAdapter extends RecyclerView.Adapter<StoreFrag
     @Override
     public StoreItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_store_recycler_view_item, parent, false);
-        return new StoreFragmentRecyclerAdapter.StoreItemViewHolder(view);
+        return new ProductsRecyclerAdapter.StoreItemViewHolder(view);
     }
 
     @Override
@@ -42,9 +42,9 @@ public class StoreFragmentRecyclerAdapter extends RecyclerView.Adapter<StoreFrag
         holder.nameTextView.setText(mProducts.get(position).getName());
         holder.countTextView.setText(String.format("%d шт.", mProducts.get(position).getCount()));
         if(isAdmin){
-            holder.itemView.setOnClickListener(v -> openDetailFragment(new EditFragment(mProducts.get(position)), "EDIT_FRAGMENT"));
+            holder.itemView.setOnClickListener(v -> openDetailFragment(new EditFragment(mProducts.get(position)), EditFragment.class.getSimpleName()));
         }else {
-            holder.itemView.setOnClickListener(v -> openDetailFragment(new DetailFragment(position), "DETAIL_FRAGMENT"));
+            holder.itemView.setOnClickListener(v -> openDetailFragment(new DetailFragment(position, mProducts), DetailFragment.class.getSimpleName()));
         }
     }
 
@@ -61,8 +61,8 @@ public class StoreFragmentRecyclerAdapter extends RecyclerView.Adapter<StoreFrag
     public class StoreItemViewHolder extends RecyclerView.ViewHolder {
 
         TextView nameTextView;
-
         TextView countTextView;
+
         public StoreItemViewHolder(@NonNull View itemView) {
             super(itemView);
 

@@ -22,6 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/twenty_dp"
+                android:layout_marginEnd="@dimen/twenty_dp"
                 android:layout_marginTop="@dimen/twenty_dp"
                 android:textAppearance="@style/AppThemeText"
                 android:text="@string/name"/>
@@ -29,6 +30,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_marginEnd="@dimen/twenty_dp"
                 android:layout_marginStart="@dimen/twenty_dp"
                 android:background="@color/grey"/>
 
@@ -37,18 +39,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/twenty_dp"
+                android:layout_marginEnd="@dimen/twenty_dp"
                 android:layout_marginTop="@dimen/twenty_dp"/>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="@dimen/twenty_dp"
-                android:background="@color/grey"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/twenty_dp"
+                android:layout_marginEnd="@dimen/twenty_dp"
                 android:layout_marginTop="@dimen/twenty_dp"
                 android:textAppearance="@style/AppThemeText"
                 android:text="@string/price"/>
@@ -57,6 +55,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginStart="@dimen/twenty_dp"
+                android:layout_marginEnd="@dimen/twenty_dp"
                 android:background="@color/grey"/>
 
             <EditText
@@ -64,18 +63,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/twenty_dp"
+                android:layout_marginEnd="@dimen/twenty_dp"
                 android:layout_marginTop="@dimen/twenty_dp"/>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="@dimen/twenty_dp"
-                android:background="@color/grey"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/twenty_dp"
+                android:layout_marginEnd="@dimen/twenty_dp"
                 android:layout_marginTop="@dimen/twenty_dp"
                 android:textAppearance="@style/AppThemeText"
                 android:text="@string/count"/>
@@ -84,6 +79,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginStart="@dimen/twenty_dp"
+                android:layout_marginEnd="@dimen/twenty_dp"
                 android:background="@color/grey"/>
 
             <EditText
@@ -91,8 +87,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/twenty_dp"
+                android:layout_marginEnd="@dimen/twenty_dp"
                 android:layout_marginTop="@dimen/twenty_dp"
                 android:inputType="number"/>
+
+            <Button
+                android:id="@+id/fragment_edit_button_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/twenty_dp"
+                android:layout_marginBottom="@dimen/twenty_dp"
+                android:layout_gravity="center"
+                android:text="@string/save"/>
 
         </LinearLayout>
 

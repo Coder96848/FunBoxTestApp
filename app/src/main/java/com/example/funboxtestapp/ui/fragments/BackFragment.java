@@ -17,8 +17,7 @@ import com.example.funboxtestapp.App;
 import com.example.funboxtestapp.R;
 import com.example.funboxtestapp.db.Product;
 import com.example.funboxtestapp.interfaces.IFragment;
-import com.example.funboxtestapp.util.DataAdapter;
-import com.example.funboxtestapp.util.StoreFragmentRecyclerAdapter;
+import com.example.funboxtestapp.util.ProductsRecyclerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +30,7 @@ public class BackFragment extends Fragment {
 
     private static final String TAG = BackFragment.class.getSimpleName();
     private RecyclerView mRecyclerView;
-    private CompositeDisposable mProductDisposable = new CompositeDisposable();
-    private DataAdapter dataAdapter = new DataAdapter(App.getProductDAO());
+    private CompositeDisposable mDisposable = new CompositeDisposable();
 
     @Nullable
     @Override
@@ -59,25 +57,21 @@ public class BackFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
         mRecyclerView.setLayoutManager(linearLayoutManager);
 
-        getProducts();
+        mDisposable.add(App.getDataAdapter().getProducts()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::setAdapter,
+                        throwable -> Log.e(TAG, "Unable to get products", throwable)));
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mProductDisposable.clear();
+        mDisposable.clear();
     }
 
     private void setAdapter(List<Product> productList){
-        StoreFragmentRecyclerAdapter adapter = new StoreFragmentRecyclerAdapter(getActivity(), new ArrayList<>(productList), true);
+        ProductsRecyclerAdapter adapter = new ProductsRecyclerAdapter(this.getContext(), new ArrayList<>(productList), true);
         mRecyclerView.setAdapter(adapter);
-    }
-
-    private void getProducts(){
-        mProductDisposable.add(dataAdapter.getProducts()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::setAdapter,
-                        throwable -> Log.e(TAG, "Unable to get products", throwable)));
     }
 }

@@ -10,7 +10,7 @@ import androidx.room.Update;
 import java.util.List;
 
 import io.reactivex.Completable;
-import io.reactivex.Single;
+import io.reactivex.Flowable;
 
 @Dao
 public interface ProductDAO {
@@ -21,9 +21,6 @@ public interface ProductDAO {
     @Update
     Completable update(Product Product);
 
-    @Update
-    Completable buyProduct(Product product);
-
     @Delete
     Completable delete(Product product);
 
@@ -31,5 +28,5 @@ public interface ProductDAO {
     Completable deleteAll();
 
     @Query("SELECT * FROM product_table")
-    Single<List<Product>> getProducts();
+    Flowable<List<Product>> getProducts();
 }

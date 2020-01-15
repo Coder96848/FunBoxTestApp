@@ -21,12 +21,11 @@ public class App extends Application {
     private static final String TAG = App.class.getSimpleName();
     private static SharedPreferences sharedPreferences;
     private static ProductRoomDB productRoomDB;
-    private static ProductDAO productDAO;
     private static DataAdapter dataAdapter;
     private static boolean isFirstStart = true;
 
-    public static ProductDAO getProductDAO() {
-        return productDAO;
+    public static DataAdapter getDataAdapter() {
+        return dataAdapter;
     }
 
     @Override
@@ -36,7 +35,7 @@ public class App extends Application {
         isFirstStart = sharedPreferences.getBoolean("isFirstStart", true);
         try {
             productRoomDB = ProductRoomDB.getInstance(getApplicationContext());
-            productDAO = productRoomDB.productDAO();
+            ProductDAO productDAO = productRoomDB.productDAO();
             dataAdapter = new DataAdapter(productDAO);
             if(setFirstStartFlag()) initialData();
 
@@ -81,7 +80,7 @@ public class App extends Application {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {},
-                        throwable -> Log.e(TAG, "Unable to update products", throwable)));
+                        throwable -> Log.e(TAG, "Unable to insert products", throwable)));
     }
 
     public static boolean setFirstStartFlag() {

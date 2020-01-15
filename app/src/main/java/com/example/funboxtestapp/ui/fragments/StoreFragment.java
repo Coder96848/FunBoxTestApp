@@ -16,8 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.funboxtestapp.App;
 import com.example.funboxtestapp.R;
 import com.example.funboxtestapp.db.Product;
-import com.example.funboxtestapp.util.DataAdapter;
-import com.example.funboxtestapp.util.StoreFragmentRecyclerAdapter;
+import com.example.funboxtestapp.util.ProductsRecyclerAdapter;
 
 
 import java.util.ArrayList;
@@ -28,12 +27,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
+
 public class StoreFragment extends Fragment {
 
     private static final String TAG = StoreFragment.class.getSimpleName();
-    private RecyclerView recyclerView;
+    private RecyclerView mRecyclerView;
     private CompositeDisposable mDisposable = new CompositeDisposable();
-    private DataAdapter dataAdapter = new DataAdapter(App.getProductDAO());
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,33 +51,29 @@ public class StoreFragment extends Fragment {
 
         Toolbar toolbar = view.findViewById(R.id.fragment_store_toolbar);
         toolbar.setTitle(getString(R.string.shop));
-        recyclerView = view.findViewById(R.id.fragment_store_recycler_view);
+        mRecyclerView = view.findViewById(R.id.fragment_store_recycler_view);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
-        recyclerView.setLayoutManager(linearLayoutManager);
+        mRecyclerView.setLayoutManager(linearLayoutManager);
 
-        getProducts();
+        mDisposable.add(App.getDataAdapter().getProducts()
+                .subscribeOn(Schedulers.io())
+                .flatMap(products -> Flowable.fromIterable(products)
+                        .filter(product -> product.getCount() > 0)
+                        .toList()
+                        .toFlowable())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::setAdapter,
+                        throwable -> Log.e(TAG, "Unable to get products", throwable)));
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-
         mDisposable.clear();
     }
 
     private void setAdapter(List<Product> productList){
-        StoreFragmentRecyclerAdapter adapter = new StoreFragmentRecyclerAdapter(this.getContext(), new ArrayList<>(productList), false);
-        recyclerView.setAdapter(adapter);
-    }
-
-    private void getProducts(){
-        mDisposable.add(dataAdapter.getProducts()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .toFlowable()
-                .flatMap(Flowable::fromIterable)
-                .filter(products -> products.getCount() > 0)
-                .toList()
-                .subscribe(this::setAdapter, throwable -> Log.e(TAG, "Unable to get products", throwable)));
+        ProductsRecyclerAdapter adapter = new ProductsRecyclerAdapter(this.getContext(), new ArrayList<>(productList), false);
+        mRecyclerView.setAdapter(adapter);
     }
 }

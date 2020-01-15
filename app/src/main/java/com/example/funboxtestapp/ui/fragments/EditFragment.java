@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
@@ -16,11 +17,12 @@ import com.example.funboxtestapp.App;
 import com.example.funboxtestapp.R;
 import com.example.funboxtestapp.db.Product;
 import com.example.funboxtestapp.interfaces.IFragment;
-import com.example.funboxtestapp.util.DataAdapter;
+import com.jakewharton.rxbinding3.view.RxView;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
+
 
 public class EditFragment extends Fragment {
 
@@ -31,7 +33,6 @@ public class EditFragment extends Fragment {
     private EditText mPriceEditText;
     private EditText mCountEditText;
     private CompositeDisposable mDisposable = new CompositeDisposable();
-    private DataAdapter dataAdapter = new DataAdapter(App.getProductDAO());
 
     public EditFragment() {
         mProduct = new Product("", 0,0);
@@ -53,13 +54,15 @@ public class EditFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Toolbar toolbar = view.findViewById(R.id.fragment_edit_toolbar);
         toolbar.inflateMenu(R.menu.edit_menu);
-
+        toolbar.setNavigationIcon(R.drawable.icon_back);
+        toolbar.setNavigationOnClickListener(v -> onBack());
         if (isNewProduct) {
             toolbar.setTitle(getString(R.string.add));
         }else {
             toolbar.setTitle(getString(R.string.change));
         }
 
+        Button buttonSave = view.findViewById(R.id.fragment_edit_button_save);
         mNameEditText = view.findViewById(R.id.fragment_edit_edit_text_name);
         mPriceEditText = view.findViewById(R.id.fragment_edit_edit_text_price);
         mCountEditText = view.findViewById(R.id.fragment_edit_edit_text_count);
@@ -68,32 +71,31 @@ public class EditFragment extends Fragment {
         mPriceEditText.setText(String.format("%.2f", mProduct.getPrice()));
         mCountEditText.setText(String.format("%d", mProduct.getCount()));
 
-        toolbar.setOnMenuItemClickListener(item -> {
-
-            if (item.getItemId() == R.id.menu_item_edit) {
-                if (isNewProduct) {
-                    mDisposable.add(dataAdapter.insert(newProduct())
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(() -> {},
-                                    throwable -> Log.e(TAG, "Unable to insert products", throwable)));
-                }else {
-                    mProduct.setName(getName());
-                    mProduct.setPrice(getPrice());
-                    mProduct.setCount(getCount());
-                    mDisposable.add(dataAdapter.update(mProduct)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(() -> {},
-                                    throwable -> Log.e(TAG, "Unable to update products", throwable)));
-                }
-                onBack();
-            }
-            return false;
-
-        });
-        toolbar.setNavigationIcon(R.drawable.icon_back);
-        toolbar.setNavigationOnClickListener(v -> onBack());
+        if (isNewProduct) {
+            mDisposable.add(RxView.clicks(buttonSave)
+                    .subscribe(isClick -> {
+                        mDisposable.add(App.getDataAdapter().insert(newProduct())
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe()
+                        );
+                        onBack();
+                        }, throwable -> Log.e(TAG, "Unable to get products", throwable)));
+        }else {
+            mDisposable.add(RxView.clicks(buttonSave)
+                    .subscribe(isClick -> {
+                        mProduct.setName(getName());
+                        mProduct.setPrice(getPrice());
+                        mProduct.setCount(getCount());
+                        mDisposable.add(App.getDataAdapter().update(mProduct)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe()
+                        );
+                        onBack();
+                        },throwable -> Log.e(TAG, "Unable to get products", throwable)
+                    ));
+        }
     }
 
     @Override
@@ -129,6 +131,5 @@ public class EditFragment extends Fragment {
         String count = mCountEditText.getText().toString();
         return !count.equals("") ? Integer.parseInt(count) : 0;
     }
-
 
 }
